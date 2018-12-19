@@ -76,7 +76,7 @@ const userDeleted = function (req, res) {
     let idUser = req.params.idUser;
     console.log(idUser);
     if (idUser) {
-        Loc.findOneAndRemove(idUser)
+        Users.findOneAndRemove(idUser)
             .exec(function (err, location) {
                 if (err) {
                     console.log(err);
