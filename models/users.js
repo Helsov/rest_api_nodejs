@@ -20,5 +20,5 @@ const usersSchema = new mongoose.Schema({
     }
 });
 
-const Users = mongoose.model('Location', usersSchema, 'users');
+const Users = mongoose.model('Users', usersSchema, 'users');
 module.exports = Users;
