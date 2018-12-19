@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 const crypto = require('crypto');
 const Users = require('../models/users');
 
-const setPassword = function(password){
+const setPassword = (password) => {
     this.salt = crypto.randomBytes(16).toString('hex');
     return this.hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, 'sha512');
 };
 
-const sendJSONresponse = function (res, status, content) {
+const sendJSONresponse = (res, status, content) => {
     res.status(status);
     res.json(content);
 };
@@ -26,16 +26,16 @@ const validateRegister = (login, callback) => {
     });
 }
 
-const userListAdd = function (req, res) {
+const userListAdd = (req, res) => {
     sendJSONresponse(res, 200, {
         "status": "success"
     })
 };
 
-const userList = function (req, res) {
+const userList = (req, res) => {
     Users.find()
-        .exec((err, location) => {
-            if (!location) {
+        .exec((err, succes) => {
+            if (!succes) {
                 sendJSONresponse(res, 404, {
                     "message": "Данные не найдены"
                 });
@@ -45,12 +45,12 @@ const userList = function (req, res) {
                 sendJSONresponse(res, 404, err);
                 return;
             }
-            console.log(location);
-            sendJSONresponse(res, 200, location);
+            console.log(succes);
+            sendJSONresponse(res, 200, succes);
         })
 };
 
-const userCreate = function (req, res) {
+const userCreate = (req, res) => {
     console.log(req.body);
     validateRegister(req.body.login, (result)=>{
         if(!result){
@@ -58,13 +58,13 @@ const userCreate = function (req, res) {
                 name: req.body.name,
                 login: req.body.login,
                 password: setPassword(req.body.password),
-            }, function (err, location) {
+            }, function (err, succes) {
                 if (err) {
                     console.log(err);
                     sendJSONresponse(res, 400, err);
                 } else {
-                    console.log(location);
-                    sendJSONresponse(res, 201, location);
+                    console.log(succes);
+                    sendJSONresponse(res, 201, succes);
                 }
             });
         }
@@ -76,8 +76,8 @@ const userDeleted = function (req, res) {
     let idUser = req.params.idUser;
     console.log(idUser);
     if (idUser) {
-        Users.findOneAndRemove(idUser)
-            .exec(function (err, location) {
+        Loc.findOneAndRemove(idUser)
+            .exec(function (err, succes) {
                 if (err) {
                     console.log(err);
                     sendJSONresponse(res, 404, err);
