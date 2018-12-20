@@ -4,7 +4,6 @@ const path = require('path');
 const db = require('./config');
 const app = express();
 const router = require('./routes/index');
-const cors = require('cors')
 const port = process.env.PORT || db.config.Port;
 
 app.use(bodyParser.json());
@@ -15,7 +14,12 @@ app.use(bodyParser.urlencoded({
 app.set("view engine", "ejs");
 app.set('views', path.join(__dirname, 'views'));
 
-app.use(cors);
+app.use(function(req, res, next) { 
+    res.header("Access-Control-Allow-Origin", "*"); 
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"); 
+    next(); 
+}); 
+
 app.use('/api', router);
 
 app.listen(port, ()=>{
