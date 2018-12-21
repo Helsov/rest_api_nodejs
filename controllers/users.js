@@ -1,11 +1,21 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 const Users = require('../models/users');
+const bcrypt = require('bcryptjs');
 
 const setPassword = (password) => {
     this.salt = crypto.randomBytes(16).toString('hex');
     return this.hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, 'sha512');
 };
+
+const hashPassword = (password) => {
+    try {
+      const salt = bcrypt.genSaltSync(10)
+      return bcrypt.hashSync(password, salt)
+    } catch(error) {
+      throw new Error('Ошибка хеширования', error)
+    }
+  }
 
 const sendJSONresponse = (res, status, content) => {
     res.status(status);
@@ -57,7 +67,7 @@ const userCreate = (req, res) => {
             Users.create({
                 name: req.body.name,
                 login: req.body.login,
-                password: setPassword(req.body.password),
+                password: hashPassword(req.body.password),
             }, function (err, succes) {
                 if (err) {
                     console.log(err);
