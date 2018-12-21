@@ -6,8 +6,7 @@ const usersSchema = new mongoose.Schema({
         default: Date.now()
     },
     name: {
-        type: String,
-        required: true
+        type: String
     },
     login: {
         type: String,
@@ -17,6 +16,11 @@ const usersSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
+    }
+},{
+    timestamps: {
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt'
     }
 });
 

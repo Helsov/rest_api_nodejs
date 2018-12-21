@@ -4,7 +4,15 @@ const path = require('path');
 const db = require('./config');
 const app = express();
 const router = require('./routes/index');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const port = process.env.PORT || db.config.Port;
+
+app.use(session({store: new MongoStore({
+    url: db.config.mongoUri,
+    ttl: 14 * 24 * 60 * 60,
+    autoReconnect: true,
+  }), secret: '0GBldsyunb9EKBt2ZbuiGLAUgr43kswp6xXK', resave: true, saveUninitialized: true}))
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
