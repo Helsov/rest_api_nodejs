@@ -9,19 +9,19 @@ const hashPassword = (password) => {
     } catch(error) {
         throw new Error('Ошибка хеширования', error)
     }
-}
+};
+
+const validPass = (password, hash, callback) => {
+    bcrypt.compare(password, hash, (err, res) => {
+        res ? callback(true) : console.log('Пароль не совпал ', err);
+    })
+};
 
 const validateRegister = (login, callback) => {
     Users.findOne({
         "login": login,
     }, (err, result) => {
-        if (result == null) {
-            console.log('returning false')
-            callback(false)
-        } else {
-            console.log('returning true')
-            callback(true)
-        }
+        result == null ? callback(false) : callback(true)
     });
 };
 
@@ -29,20 +29,7 @@ const validateSignIn = (login, password, callback) => {
     Users.findOne({
         "login" : login,
     }, (err, result) => {
-        if(result){
-            bcrypt.compare(password, result.password, (err, res) => {
-                if (res) {
-                    console.log('Успешная авторизация ', result);
-                    callback(true);
-                } else {
-                    return console.log('Пароль не совпал ', err);
-                } 
-            })
-        }
-        else{
-            console.log('Ошибка авторизации ', err);
-            callback(false);
-        }
+        result ? validPass(password, result.password, callback) : callback(false);
     });
 }
 

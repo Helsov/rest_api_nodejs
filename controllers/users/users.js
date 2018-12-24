@@ -15,13 +15,13 @@ const userCreate = (req, res) => {
                 login: req.body.login,
                 password: validation.hashPassword(req.body.password),
             }, (err, succes) => {
-                if (err) {
-                    console.log(err);
-                    sendJSONresponse(res, 400, err);
-                } else {
-                    console.log(succes);
-                    sendJSONresponse(res, 201, succes);
-                }
+                err ? (
+                    console.log(err),
+                    sendJSONresponse(res, 400, err)
+                ) : (
+                    console.log(succes),
+                    sendJSONresponse(res, 201, succes)
+                )
             });
         }
     })
@@ -34,13 +34,11 @@ const userSignIn = (req, res) => {
     console.log(sessions);
 
     validation.validateSignIn(login, password, (result) => {
-      if(result){
-        sessions = req.session;
-        sessions.username = login;
-        res.send('Успешно');
-      } else {
-        res.send('Пароль не совпал')
-      }
+        result ? (
+            sessions = req.session,
+            sessions.username = login,
+            res.send('Успешно')
+        ) : res.send('Пароль не совпал')
     });
 }
 

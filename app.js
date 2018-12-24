@@ -28,7 +28,11 @@ app.use(function(req, res, next) {
     next(); 
 }); 
 
-app.use('/api', router);
+app.use('/users', router);
+
+app.use((req, res, next) => {
+    res.status(404).send('ERROR 404');
+});
 
 app.listen(port, ()=>{
     console.log(`Подключились к порту: ${port}`);
