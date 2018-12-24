@@ -1,6 +1,6 @@
 const Users = require('../../models/users');
 const validation = require('./validation');
-var sessions;
+let sessions;
 
 const sendJSONresponse = (res, status, content) => {
     res.status(status);
@@ -14,7 +14,7 @@ const userCreate = (req, res) => {
                 name: req.body.name,
                 login: req.body.login,
                 password: validation.hashPassword(req.body.password),
-            }, function (err, succes) {
+            }, (err, succes) => {
                 if (err) {
                     console.log(err);
                     sendJSONresponse(res, 400, err);
@@ -69,12 +69,12 @@ const userList = (req, res) => {
         })
 };
 
-const userDeleted = function (req, res) {
+const userDeleted = (req, res) => {
     let idUser = req.params.idUser;
     console.log(idUser);
     if (idUser) {
         Loc.findOneAndRemove(idUser)
-            .exec(function (err, succes) {
+            .exec((err, succes) => {
                 if (err) {
                     console.log(err);
                     sendJSONresponse(res, 404, err);
