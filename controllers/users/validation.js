@@ -26,24 +26,24 @@ const validateRegister = (login, callback) => {
 };
 
 const validateSignIn = (login, password, callback) => {
-    bcrypt.compare(password, hashPassword(password), (err, res) => {
-        if (res) {
-            Users.findOne({
-                "login" : login
-            }, (err, result) => {
-                if(result){
+    Users.findOne({
+        "login" : login,
+    }, (err, result) => {
+        if(result){
+            bcrypt.compare(password, result.password, (err, res) => {
+                if (res) {
                     console.log('Успешная авторизация ', result);
                     callback(true);
-                }
-                else{
-                    console.log('Ошибка авторизации ', err);
-                    callback(false);
-                }
-            });
-        } else {
-            console.log('Пароль не совпал ', err);
+                } else {
+                    return console.log('Пароль не совпал ', err);
+                } 
+            })
         }
-    })
+        else{
+            console.log('Ошибка авторизации ', err);
+            callback(false);
+        }
+    });
 }
 
 module.exports = {

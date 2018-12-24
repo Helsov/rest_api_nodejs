@@ -29,14 +29,13 @@ const userCreate = (req, res) => {
 };
 
 const userSignIn = (req, res) => {
-    sessions = req.session;
     let login = req.body.login;
     let password = req.body.password;
-    sessions.username = login;
     console.log(sessions);
 
     validation.validateSignIn(login, password, (result) => {
       if(result){
+        sessions = req.session;
         sessions.username = login;
         res.send('Успешно');
       } else {
