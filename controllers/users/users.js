@@ -37,7 +37,7 @@ const userSignIn = (req, res) => {
         result ? (
             sessions = req.session,
             sessions.username = login,
-            res.send('Успешно')
+            res.send('Success')
         ) : res.send('Пароль не совпал')
     });
 }
