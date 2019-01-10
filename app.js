@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const db = require('./config');
 const app = express();
-const router = require('./routes/index');
+const router = require('./routes/users');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const port = process.env.PORT || db.config.Port;
@@ -23,10 +23,18 @@ app.set("view engine", "ejs");
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(function(req, res, next) { 
-    res.header("Access-Control-Allow-Origin", "*"); 
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"); 
-    next(); 
-}); 
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-type,Authorization');
+    next();
+});
+
+app.use(function (err, req, res, next) {
+    if (err.name === 'UnauthorizedError') { // Send the error rather than to show it on the console
+        res.status(401).send(err);
+    } else {
+        next(err);
+    }
+});
 
 app.use('/users', router);
 
